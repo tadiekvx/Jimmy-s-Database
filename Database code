@@ -1,0 +1,109 @@
+Create Table Admin
+(
+    Admin_ID VarChar(50),
+    Admin_Name VarChar(50),
+    Username VarChar(50),
+    Status bool,
+    Menu_ID int not null,
+    CONSTRAINT "PK_Menu_Admin" primary key (Menu_ID),
+    foreign key (Menu_ID) references Menu(Menu_ID)
+);
+
+
+Create Table Menu
+(
+    Menu_ID int,
+    Food_Price float,
+    Start_Date datetime,
+    End_Date datetime,
+    Food_ID int not null,
+    CONSTRAINT "PK_Menu_FItm" primary key (Food_ID),
+    foreign key (Food_ID) references FoodItem(Food_ID)
+
+);
+
+
+Create Table FoodItem
+(
+    Food_ID int,
+    Food_Name VarChar(50),
+    Food_Price float,
+    Food_Category bool,
+    Unit_Quantity float not null,
+    CONSTRAINT "PK_Quantity_FItm" primary key (Unit_Quantity),
+    foreign key (Unit_Quantity) references Order_Item(Unit_Quantity)
+);
+
+
+Create Table Customer
+(
+    Cus_ID VarChar(50),
+
+    F_Name Varchar (50),
+    L_Name VarCar(50),
+
+    P_Number int,
+
+    Payment_ID int not null,
+    Food_ID int not null,
+    CONSTRAINT "PK_Cus_FItm" primary key (Food_ID, Payment_ID),
+    foreign key (Food_ID) references FoodItem(Food_ID),
+    foreign key (Payment_ID) references Payment(Payment_ID)
+);
+
+
+Create Table Orders
+(
+    Ord_ID int,
+    Ord_Date datetime,
+    Unit_Quantity float,
+    PickUp Bool,
+
+    Cus_ID VarChar not null,
+    CONSTRAINT "PK_Ord_Cus" primary key (Cus_ID),
+    foreign key (Cus_ID) references Customer(Cus_ID)
+);
+
+Create Table Order_Item
+(
+    Unit_Quantity float not null,
+    Ord_ID int not null,
+    Food_Price float not null,
+    Food_ID not null,
+
+    CONSTRAINT "PK_OrdItm_Ord" primary key (Ord_ID, Unit_Quantity, Food_Price, Food_ID),
+
+    foreign key (Ord_ID) references Orders(Ord_ID),
+    foreign key (Unit_Quantity) references Orders(Unit_Quantity),
+    foreign key (Food_Price) references Menu(Food_Price),
+    foreign key (Food_ID) references FoodItem(Food_ID)
+);
+
+Create Table Payment
+(
+    Payment_ID int,
+
+    Payment_Method bool,
+    Amount_Paid float,
+    Pay_Date datetime
+,
+
+    Ord_ID int not null,
+    Cus_ID VarChar not null,
+    CONSTRAINT "PK_Payment_Cus_Ord" primary key (Ord_ID, Cus_ID),
+    foreign key (Ord_ID) references Orders(Ord_ID),
+    foreign key (Cus_ID) references Customer(Cus_ID)
+
+);
+
+Create Table Chef
+(
+    ChefID int,
+    First_Name VarChar(50),
+    Last_Name VarChar(50),
+    Username VarChar(50),
+    P_Number int,
+   Ord_ID int not null,
+    CONSTRAINT "PK_Chef_Ord" primary key (Ord_ID),
+    foreign key (Ord_ID) references Orders(Ord_ID)
+);
